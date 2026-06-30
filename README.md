@@ -35,8 +35,8 @@ Manage Right is built for cafés, restaurants, salons, retail stores, kiosks, cl
 - [x] Supabase database connection configured
 - [x] Authentication flows: register, login, 2FA, passkey, password reset
 - [x] User settings: profile, security, appearance, account deletion
-- [ ] Role system: `Owner`, `Manager`, `Employee`
-- [ ] Multi-tenancy: businesses and branches as top-level scopes
+- [x] Role system: `Owner`, `Manager`, `Employee`
+- [x] Multi-tenancy: businesses and branches as top-level scopes
 
 ---
 

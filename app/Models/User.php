@@ -7,6 +7,8 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
@@ -48,9 +50,45 @@ class User extends Authenticatable implements PasskeyUser
         ];
     }
 
-    /**
-     * Get the user's initials
-     */
+    public function ownedBusinesses(): HasMany
+    {
+        return $this->hasMany(Business::class, 'owner_id');
+    }
+
+    public function businesses(): BelongsToMany
+    {
+        return $this->belongsToMany(Business::class, 'business_users')
+            ->withPivot('role', 'branch_id')
+            ->withTimestamps();
+    }
+
+    public function businessMemberships(): HasMany
+    {
+        return $this->hasMany(BusinessUser::class);
+    }
+
+    public function roleIn(Business $business): ?string
+    {
+        return $this->businessMemberships()
+            ->where('business_id', $business->id)
+            ->value('role');
+    }
+
+    public function isOwnerOf(Business $business): bool
+    {
+        return $this->roleIn($business) === 'owner';
+    }
+
+    public function isManagerOf(Business $business): bool
+    {
+        return $this->roleIn($business) === 'manager';
+    }
+
+    public function isEmployeeOf(Business $business): bool
+    {
+        return $this->roleIn($business) === 'employee';
+    }
+
     public function initials(): string
     {
         $initials = Str::initials($this->name, true);
