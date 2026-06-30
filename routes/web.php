@@ -3,6 +3,8 @@
 use App\Livewire\Business\BranchManager;
 use App\Livewire\Business\InviteEmployee;
 use App\Livewire\Onboarding\BusinessSetup;
+use App\Livewire\Attendance\ClockIn;
+use App\Livewire\Attendance\ManagerReview;
 use App\Livewire\Scheduling\ShiftTemplates;
 use App\Livewire\Scheduling\WeeklySchedule;
 use Illuminate\Support\Facades\Route;
@@ -18,6 +20,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::livewire('/employees/invite', InviteEmployee::class)->name('employees.invite');
         Route::livewire('/shift-templates', ShiftTemplates::class)->name('shift-templates.index');
         Route::livewire('/schedule', WeeklySchedule::class)->name('schedule.index');
+        Route::livewire('/attendance/clock', ClockIn::class)->name('attendance.clock');
+        Route::livewire('/attendance/review', ManagerReview::class)->name('attendance.review');
     });
 });
 

@@ -27,6 +27,15 @@
                         </flux:sidebar.item>
                     </flux:sidebar.group>
 
+                    <flux:sidebar.group :heading="__('Attendance')" class="grid">
+                        <flux:sidebar.item icon="camera" :href="route('attendance.clock')" :current="request()->routeIs('attendance.clock')" wire:navigate>
+                            {{ __('Clock In / Out') }}
+                        </flux:sidebar.item>
+                        <flux:sidebar.item icon="clipboard-document-list" :href="route('attendance.review')" :current="request()->routeIs('attendance.review')" wire:navigate>
+                            {{ __('Review') }}
+                        </flux:sidebar.item>
+                    </flux:sidebar.group>
+
                     <flux:sidebar.group :heading="__('Scheduling')" class="grid">
                         <flux:sidebar.item icon="calendar-days" :href="route('schedule.index')" :current="request()->routeIs('schedule.*')" wire:navigate>
                             {{ __('Weekly Schedule') }}

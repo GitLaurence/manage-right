@@ -57,11 +57,11 @@ Manage Right is built for cafés, restaurants, salons, retail stores, kiosks, cl
 ---
 
 ### Phase 4 — Selfie Time-In / Time-Out
-- [ ] Camera capture UI (mobile-friendly Livewire component)
-- [ ] Selfie upload to Supabase Storage
-- [ ] Time-in / time-out logging with timestamp and geolocation (optional)
-- [ ] Manager review interface for attendance entries
-- [ ] Late / undertime auto-detection based on assigned schedule
+- [x] Camera capture UI (mobile-friendly Livewire component)
+- [x] Selfie upload to Supabase Storage
+- [x] Time-in / time-out logging with timestamp and geolocation (optional)
+- [x] Manager review interface for attendance entries
+- [x] Late / undertime auto-detection based on assigned schedule
 
 ---
 
