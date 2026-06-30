@@ -41,10 +41,10 @@ Manage Right is built for cafés, restaurants, salons, retail stores, kiosks, cl
 ---
 
 ### Phase 2 — Business & Branch Setup
-- [ ] Business registration flow (name, type, logo)
-- [ ] Branch creation and management (name, address, timezone)
-- [ ] Invite employees by email and assign them to a branch
-- [ ] Employee profiles (position, employment type, rate type)
+- [x] Business registration flow (name, type, logo)
+- [x] Branch creation and management (name, address, timezone)
+- [x] Invite employees by email and assign them to a branch
+- [x] Employee profiles (position, employment type, rate type)
 
 ---
 

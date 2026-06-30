@@ -16,19 +16,20 @@
                         {{ __('Dashboard') }}
                     </flux:sidebar.item>
                 </flux:sidebar.group>
+
+                @if (auth()->user()->current_business_id)
+                    <flux:sidebar.group :heading="__('Management')" class="grid">
+                        <flux:sidebar.item icon="layout-grid" :href="route('branches.index')" :current="request()->routeIs('branches.*')" wire:navigate>
+                            {{ __('Branches') }}
+                        </flux:sidebar.item>
+                        <flux:sidebar.item icon="users" :href="route('employees.invite')" :current="request()->routeIs('employees.*')" wire:navigate>
+                            {{ __('Invite Employee') }}
+                        </flux:sidebar.item>
+                    </flux:sidebar.group>
+                @endif
             </flux:sidebar.nav>
 
             <flux:spacer />
-
-            <flux:sidebar.nav>
-                <flux:sidebar.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">
-                    {{ __('Repository') }}
-                </flux:sidebar.item>
-
-                <flux:sidebar.item icon="book-open-text" href="https://laravel.com/docs/starter-kits#livewire" target="_blank">
-                    {{ __('Documentation') }}
-                </flux:sidebar.item>
-            </flux:sidebar.nav>
 
             <x-desktop-user-menu class="hidden lg:block" :name="auth()->user()->name" />
         </flux:sidebar>

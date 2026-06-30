@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class BusinessUser extends Model
 {
-    protected $fillable = ['user_id', 'business_id', 'branch_id', 'role'];
+    protected $fillable = ['user_id', 'business_id', 'branch_id', 'role', 'position', 'employment_type', 'rate_type', 'rate'];
 
     public function user(): BelongsTo
     {
