@@ -26,6 +26,15 @@
                             {{ __('Invite Employee') }}
                         </flux:sidebar.item>
                     </flux:sidebar.group>
+
+                    <flux:sidebar.group :heading="__('Scheduling')" class="grid">
+                        <flux:sidebar.item icon="calendar-days" :href="route('schedule.index')" :current="request()->routeIs('schedule.*')" wire:navigate>
+                            {{ __('Weekly Schedule') }}
+                        </flux:sidebar.item>
+                        <flux:sidebar.item icon="squares-2x2" :href="route('shift-templates.index')" :current="request()->routeIs('shift-templates.*')" wire:navigate>
+                            {{ __('Shift Templates') }}
+                        </flux:sidebar.item>
+                    </flux:sidebar.group>
                 @endif
             </flux:sidebar.nav>
 

@@ -27,6 +27,9 @@ return new class extends Migration
             'branches',
             'business_users',
             'invitations',
+            'shift_templates',
+            'schedules',
+            'schedule_entries',
         ];
 
         foreach ($tables as $table) {

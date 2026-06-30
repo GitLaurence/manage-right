@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Business extends Model
 {
@@ -27,6 +28,16 @@ class Business extends Model
     public function memberships(): HasMany
     {
         return $this->hasMany(BusinessUser::class);
+    }
+
+    public function shiftTemplates(): HasMany
+    {
+        return $this->hasMany(ShiftTemplate::class);
+    }
+
+    public function schedules(): HasMany
+    {
+        return $this->hasManyThrough(Schedule::class, Branch::class);
     }
 
     public function users(): BelongsToMany

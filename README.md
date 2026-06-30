@@ -49,10 +49,10 @@ Manage Right is built for cafés, restaurants, salons, retail stores, kiosks, cl
 ---
 
 ### Phase 3 — Scheduling
-- [ ] Shift templates (name, start time, end time, break duration)
-- [ ] Weekly schedule builder per branch
-- [ ] Drag-and-drop schedule assignment
-- [ ] Schedule publishing and employee notifications
+- [x] Shift templates (name, start time, end time, break duration)
+- [x] Weekly schedule builder per branch
+- [x] Drag-and-drop schedule assignment
+- [x] Schedule publishing and employee notifications
 
 ---
 

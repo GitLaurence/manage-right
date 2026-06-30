@@ -3,6 +3,8 @@
 use App\Livewire\Business\BranchManager;
 use App\Livewire\Business\InviteEmployee;
 use App\Livewire\Onboarding\BusinessSetup;
+use App\Livewire\Scheduling\ShiftTemplates;
+use App\Livewire\Scheduling\WeeklySchedule;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome')->name('home');
@@ -14,6 +16,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::view('dashboard', 'dashboard')->name('dashboard');
         Route::livewire('/branches', BranchManager::class)->name('branches.index');
         Route::livewire('/employees/invite', InviteEmployee::class)->name('employees.invite');
+        Route::livewire('/shift-templates', ShiftTemplates::class)->name('shift-templates.index');
+        Route::livewire('/schedule', WeeklySchedule::class)->name('schedule.index');
     });
 });
 
