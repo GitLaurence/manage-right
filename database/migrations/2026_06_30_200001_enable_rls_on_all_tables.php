@@ -13,6 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         $tables = [
+            'migrations',
             'users',
             'password_reset_tokens',
             'sessions',
