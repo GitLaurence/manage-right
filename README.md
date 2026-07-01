@@ -139,6 +139,105 @@ SUPABASE_KEY=your-anon-key
 
 ---
 
+## User Guide
+
+This section is for business owners and managers using Manage Right day-to-day. No technical knowledge required.
+
+---
+
+### Getting Started
+
+#### 1. Create your account
+Go to the app URL and click **Get started**. Enter your name, email address, and a password, then click **Register**.
+
+#### 2. Set up your business
+After registering you will be taken to a setup screen. Enter your business name and select your business type (café, salon, retail, etc.). You will also create your first branch — give it a name and select the timezone it operates in.
+
+#### 3. Add employees
+Go to **Employees → Invite Employee** in the left sidebar. Enter the employee's email address, choose their role (Manager or Employee), and select which branch they belong to. Click **Create Invitation** and copy the link that appears. Send that link to your employee by chat or email.
+
+When the employee opens the link and registers, they will automatically be added to your business.
+
+---
+
+### For Managers
+
+#### Reviewing attendance
+Go to **Attendance → Review** in the sidebar. You will see every clock-in and clock-out for the selected date and branch. Click **Approve** to confirm an entry, or **Flag** to mark it for follow-up and leave a note.
+
+Use the date picker at the top to look back at previous days.
+
+#### Approving requests
+Go to **Requests → Approvals**. You will see all pending leave, overtime, and undertime requests from your team. Click **Approve** to accept a request, or **Reject** to decline it and optionally leave a note explaining why.
+
+#### Viewing reports
+- **Reports → Attendance** — shows a daily breakdown of who was present, late, or absent for a selected date.
+- **Reports → Payroll Summary** — shows a week-by-week summary per employee including days present, late hours, undertime, overtime, and approved leave days. Use the **Export CSV** button to download the data for payroll processing.
+
+---
+
+### For Employees
+
+#### Clocking in and out
+Go to **Clock In / Out** in the sidebar. Allow the camera when prompted, take a selfie, and click **Record Time-In**. At the end of your shift, return to the same page and click **Record Time-Out**.
+
+> Tip: Use your phone's browser for the best camera experience.
+
+#### Submitting a request
+Go to **Requests → My Requests** and click **New Request**. Choose the type:
+
+| Type | When to use |
+|------|-------------|
+| Leave | Sick days, vacation, emergency, or unpaid leave |
+| Overtime | You worked beyond your scheduled end time |
+| Undertime | You left before your scheduled end time |
+
+Fill in the dates, hours (if applicable), and the reason, then click **Submit**. Your manager will be notified and you can track the status from the same page.
+
+---
+
+### Scheduling
+
+#### Creating shift templates
+Go to **Shift Templates** and click **New Template**. Give it a name (e.g., "Morning Shift"), set the start time, end time, and break duration. You can create as many templates as your business needs.
+
+#### Building the weekly schedule
+Go to **Schedule**. Select the branch and the week you want to plan. Assign a shift template to each employee for each day. When you are done, publish the schedule — employees will see their assigned shifts when they clock in.
+
+---
+
+### Dashboard
+
+The **Dashboard** shows a live snapshot of today across all your branches:
+
+- **Present** — number of employees who have clocked in today
+- **Late** — employees who clocked in after their scheduled start time
+- **Absent** — employees with a scheduled shift but no clock-in yet
+- **On Leave** — employees with an approved leave request for today
+- **Pending Requests** — leave and overtime requests waiting for approval
+- **Recent Activity** — a log of the last actions taken in your account
+
+---
+
+### Frequently Asked Questions
+
+**Can I manage more than one branch?**
+Yes. You can add multiple branches from **Branches** in the sidebar. Each branch has its own schedule, attendance log, and reports.
+
+**What happens if an employee forgets to clock out?**
+Their record will show a time-in with no matching time-out. A manager can see this in **Attendance → Review** and flag it for correction.
+
+**Can I use Manage Right on a phone?**
+Yes. The app works in any modern mobile browser. The Clock In page is designed specifically for phones.
+
+**How do I export data for payroll?**
+Go to **Reports → Payroll Summary**, select the week and branch, then click **Export CSV**. Open the file in Excel or Google Sheets.
+
+**How do I remove an employee?**
+Employee management (deactivating accounts) is coming in a future update. For now, contact your system administrator.
+
+---
+
 ## License
 
 MIT
