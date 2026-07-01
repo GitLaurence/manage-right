@@ -21,15 +21,13 @@
             </flux:card>
         @else
             <flux:table>
-                <flux:table.head>
-                    <flux:table.row>
-                        <flux:table.header>{{ __('Branch') }}</flux:table.header>
-                        <flux:table.header>{{ __('Address') }}</flux:table.header>
-                        <flux:table.header>{{ __('Timezone') }}</flux:table.header>
-                        <flux:table.header class="text-end">{{ __('Actions') }}</flux:table.header>
-                    </flux:table.row>
-                </flux:table.head>
-                <flux:table.body>
+                <flux:table.columns>
+                    <flux:table.column>{{ __('Branch') }}</flux:table.column>
+                    <flux:table.column>{{ __('Address') }}</flux:table.column>
+                    <flux:table.column>{{ __('Timezone') }}</flux:table.column>
+                    <flux:table.column class="text-end">{{ __('Actions') }}</flux:table.column>
+                </flux:table.columns>
+                <flux:table.rows>
                     @foreach ($this->branches as $branch)
                         <flux:table.row wire:key="{{ $branch->id }}">
                             <flux:table.cell class="font-medium">{{ $branch->name }}</flux:table.cell>
@@ -53,7 +51,7 @@
                             </flux:table.cell>
                         </flux:table.row>
                     @endforeach
-                </flux:table.body>
+                </flux:table.rows>
             </flux:table>
         @endif
 
