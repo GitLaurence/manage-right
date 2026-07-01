@@ -66,28 +66,28 @@ Manage Right is built for cafés, restaurants, salons, retail stores, kiosks, cl
 ---
 
 ### Phase 5 — Employee Requests
-- [ ] Leave request form (type, dates, reason)
-- [ ] Overtime request form (date, hours, reason)
-- [ ] Undertime request form
-- [ ] Manager approval / rejection workflow with remarks
-- [ ] Request status tracking for employees
+- [x] Leave request form (type, dates, reason)
+- [x] Overtime request form (date, hours, reason)
+- [x] Undertime request form
+- [x] Manager approval / rejection workflow with remarks
+- [x] Request status tracking for employees
 
 ---
 
 ### Phase 6 — Reports & Payroll Data
-- [ ] Daily attendance summary per branch
-- [ ] Weekly attendance report per employee
-- [ ] Overtime, undertime, late, and absence tallies
-- [ ] Exportable report (CSV / PDF) for payroll processing
-- [ ] Dashboard overview cards (total present, late, absent, on leave)
+- [x] Daily attendance summary per branch
+- [x] Weekly attendance report per employee
+- [x] Overtime, undertime, late, and absence tallies
+- [x] Exportable report (CSV) for payroll processing
+- [x] Dashboard overview cards (total present, late, absent, on leave)
 
 ---
 
 ### Phase 7 — Multi-Branch Dashboard
-- [ ] Owner-level view across all branches
-- [ ] Per-branch headcount and attendance snapshot
-- [ ] Branch-level manager permissions
-- [ ] Activity logs for audit trail
+- [x] Owner-level view across all branches
+- [x] Per-branch headcount and attendance snapshot
+- [x] Branch-level manager permissions
+- [x] Activity logs for audit trail
 
 ---
 

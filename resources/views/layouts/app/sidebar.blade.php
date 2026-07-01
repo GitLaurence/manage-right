@@ -44,6 +44,24 @@
                             {{ __('Shift Templates') }}
                         </flux:sidebar.item>
                     </flux:sidebar.group>
+
+                    <flux:sidebar.group :heading="__('Requests')" class="grid">
+                        <flux:sidebar.item icon="inbox" :href="route('requests.index')" :current="request()->routeIs('requests.index')" wire:navigate>
+                            {{ __('My Requests') }}
+                        </flux:sidebar.item>
+                        <flux:sidebar.item icon="check-circle" :href="route('requests.approvals')" :current="request()->routeIs('requests.approvals')" wire:navigate>
+                            {{ __('Approvals') }}
+                        </flux:sidebar.item>
+                    </flux:sidebar.group>
+
+                    <flux:sidebar.group :heading="__('Reports')" class="grid">
+                        <flux:sidebar.item icon="chart-bar" :href="route('reports.attendance')" :current="request()->routeIs('reports.attendance')" wire:navigate>
+                            {{ __('Attendance') }}
+                        </flux:sidebar.item>
+                        <flux:sidebar.item icon="banknotes" :href="route('reports.payroll')" :current="request()->routeIs('reports.payroll')" wire:navigate>
+                            {{ __('Payroll Summary') }}
+                        </flux:sidebar.item>
+                    </flux:sidebar.group>
                 @endif
             </flux:sidebar.nav>
 

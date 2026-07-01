@@ -1,0 +1,232 @@
+/**
+ * Manage Right — Design Tokens
+ *
+ * Structure:
+ *   1. Primitive scale  — raw values, never used directly in components
+ *   2. Semantic tokens  — purpose-named aliases that map to primitives
+ *   3. Component tokens — per-component overrides (future)
+ */
+
+/* ─── 1. Primitive scale ─────────────────────────────────── */
+:root {
+    /* Neutral */
+    --primitive-neutral-0:    #ffffff;
+    --primitive-neutral-50:   #fafafa;
+    --primitive-neutral-100:  #f5f5f5;
+    --primitive-neutral-150:  #efefef;
+    --primitive-neutral-200:  #e5e5e5;
+    --primitive-neutral-300:  #d4d4d4;
+    --primitive-neutral-400:  #a3a3a3;
+    --primitive-neutral-500:  #737373;
+    --primitive-neutral-600:  #525252;
+    --primitive-neutral-700:  #404040;
+    --primitive-neutral-800:  #262626;
+    --primitive-neutral-900:  #171717;
+    --primitive-neutral-950:  #0d0d0d;
+    --primitive-neutral-1000: #0a0a0a;
+
+    /* Brand */
+    --primitive-brand-50:   #f5f3ff;
+    --primitive-brand-100:  #ede9fe;
+    --primitive-brand-200:  #ddd6fe;
+    --primitive-brand-400:  #a78bfa;
+    --primitive-brand-500:  #8b5cf6;
+    --primitive-brand-600:  #7c3aed;
+    --primitive-brand-700:  #6d28d9;
+    --primitive-brand-900:  #4c1d95;
+
+    /* Semantic status */
+    --primitive-success-100: #dcfce7;
+    --primitive-success-500: #22c55e;
+    --primitive-success-700: #15803d;
+
+    --primitive-warning-100: #fef9c3;
+    --primitive-warning-500: #eab308;
+    --primitive-warning-700: #a16207;
+
+    --primitive-danger-100:  #fee2e2;
+    --primitive-danger-500:  #ef4444;
+    --primitive-danger-700:  #b91c1c;
+}
+
+/* ─── 2. Semantic tokens — light mode (default) ──────────── */
+:root {
+    /* Surface */
+    --color-bg:              var(--primitive-neutral-0);
+    --color-bg-subtle:       var(--primitive-neutral-50);
+    --color-bg-muted:        var(--primitive-neutral-100);
+    --color-bg-inverse:      var(--primitive-neutral-900);
+
+    /* Border */
+    --color-border:          var(--primitive-neutral-200);
+    --color-border-strong:   var(--primitive-neutral-300);
+    --color-border-focus:    var(--primitive-neutral-900);
+
+    /* Text */
+    --color-text:            var(--primitive-neutral-900);
+    --color-text-secondary:  var(--primitive-neutral-500);
+    --color-text-tertiary:   var(--primitive-neutral-400);
+    --color-text-disabled:   var(--primitive-neutral-300);
+    --color-text-inverse:    var(--primitive-neutral-0);
+    --color-text-on-muted:   var(--primitive-neutral-600);
+
+    /* Interactive */
+    --color-interactive:          var(--primitive-neutral-900);
+    --color-interactive-hover:    var(--primitive-neutral-700);
+    --color-interactive-active:   var(--primitive-neutral-800);
+    --color-interactive-subtle:   var(--primitive-neutral-100);
+    --color-interactive-fg:       var(--primitive-neutral-0);
+
+    /* Brand */
+    --color-brand:           var(--primitive-brand-600);
+    --color-brand-subtle:    var(--primitive-brand-50);
+    --color-brand-fg:        var(--primitive-neutral-0);
+
+    /* Status */
+    --color-success:         var(--primitive-success-500);
+    --color-success-subtle:  var(--primitive-success-100);
+    --color-warning:         var(--primitive-warning-500);
+    --color-warning-subtle:  var(--primitive-warning-100);
+    --color-danger:          var(--primitive-danger-500);
+    --color-danger-subtle:   var(--primitive-danger-100);
+}
+
+/* ─── Semantic tokens — dark mode ────────────────────────── */
+.dark {
+    /* Surface */
+    --color-bg:              var(--primitive-neutral-950);
+    --color-bg-subtle:       var(--primitive-neutral-900);
+    --color-bg-muted:        var(--primitive-neutral-800);
+    --color-bg-inverse:      var(--primitive-neutral-0);
+
+    /* Border */
+    --color-border:          rgba(255,255,255,.09);
+    --color-border-strong:   rgba(255,255,255,.16);
+    --color-border-focus:    var(--primitive-neutral-0);
+
+    /* Text */
+    --color-text:            var(--primitive-neutral-50);
+    --color-text-secondary:  var(--primitive-neutral-400);
+    --color-text-tertiary:   var(--primitive-neutral-600);
+    --color-text-disabled:   var(--primitive-neutral-700);
+    --color-text-inverse:    var(--primitive-neutral-900);
+    --color-text-on-muted:   var(--primitive-neutral-400);
+
+    /* Interactive */
+    --color-interactive:          var(--primitive-neutral-50);
+    --color-interactive-hover:    var(--primitive-neutral-200);
+    --color-interactive-active:   var(--primitive-neutral-100);
+    --color-interactive-subtle:   rgba(255,255,255,.06);
+    --color-interactive-fg:       var(--primitive-neutral-900);
+
+    /* Brand */
+    --color-brand:           var(--primitive-brand-500);
+    --color-brand-subtle:    rgba(139,92,246,.12);
+    --color-brand-fg:        var(--primitive-neutral-0);
+
+    /* Status */
+    --color-success-subtle:  rgba(34,197,94,.12);
+    --color-warning-subtle:  rgba(234,179,8,.12);
+    --color-danger-subtle:   rgba(239,68,68,.12);
+}
+
+/* ─── 3. Typography tokens ───────────────────────────────── */
+:root {
+    /* Scale */
+    --text-token-2xs:  0.6875rem; /* 11px */
+    --text-token-xs:   0.75rem;   /* 12px */
+    --text-token-sm:   0.8125rem; /* 13px */
+    --text-token-base: 0.9375rem; /* 15px */
+    --text-token-lg:   1.0625rem; /* 17px */
+    --text-token-xl:   1.25rem;   /* 20px */
+    --text-token-2xl:  1.5rem;    /* 24px */
+    --text-token-3xl:  2rem;      /* 32px */
+    --text-token-4xl:  2.75rem;   /* 44px */
+    --text-token-5xl:  3.5rem;    /* 56px */
+    --text-token-6xl:  4.5rem;    /* 72px */
+    --text-token-7xl:  6rem;      /* 96px */
+
+    /* Leading */
+    --leading-token-none:    1;
+    --leading-token-tight:   1.1;
+    --leading-token-snug:    1.3;
+    --leading-token-normal:  1.55;
+    --leading-token-relaxed: 1.75;
+
+    /* Tracking */
+    --tracking-token-tighter: -0.05em;
+    --tracking-token-tight:   -0.03em;
+    --tracking-token-normal:  -0.01em;
+    --tracking-token-wide:     0.04em;
+    --tracking-token-wider:    0.08em;
+    --tracking-token-widest:   0.16em;
+
+    /* Weight */
+    --weight-token-regular: 400;
+    --weight-token-medium:  500;
+    --weight-token-semibold:600;
+    --weight-token-bold:    700;
+}
+
+/* ─── 4. Spacing tokens ──────────────────────────────────── */
+:root {
+    --space-token-px:  1px;
+    --space-token-0-5: 2px;
+    --space-token-1:   4px;
+    --space-token-1-5: 6px;
+    --space-token-2:   8px;
+    --space-token-2-5: 10px;
+    --space-token-3:   12px;
+    --space-token-4:   16px;
+    --space-token-5:   20px;
+    --space-token-6:   24px;
+    --space-token-8:   32px;
+    --space-token-10:  40px;
+    --space-token-12:  48px;
+    --space-token-14:  56px;
+    --space-token-16:  64px;
+    --space-token-20:  80px;
+    --space-token-24:  96px;
+    --space-token-32: 128px;
+    --space-token-40: 160px;
+    --space-token-48: 192px;
+}
+
+/* ─── 5. Border radius tokens ────────────────────────────── */
+:root {
+    --radius-token-none: 0;
+    --radius-token-xs:   3px;
+    --radius-token-sm:   6px;
+    --radius-token-md:   10px;
+    --radius-token-lg:   14px;
+    --radius-token-xl:   20px;
+    --radius-token-2xl:  28px;
+    --radius-token-3xl:  40px;
+    --radius-token-full: 9999px;
+}
+
+/* ─── 6. Shadow tokens ───────────────────────────────────── */
+:root {
+    --shadow-token-none: none;
+    --shadow-token-xs:   0 1px 2px rgba(0,0,0,.05);
+    --shadow-token-sm:   0 1px 3px rgba(0,0,0,.08), 0 1px 2px -1px rgba(0,0,0,.06);
+    --shadow-token-md:   0 4px 6px -1px rgba(0,0,0,.07), 0 2px 4px -2px rgba(0,0,0,.05);
+    --shadow-token-lg:   0 10px 24px rgba(0,0,0,.08), 0 2px 6px rgba(0,0,0,.04);
+    --shadow-token-xl:   0 20px 40px rgba(0,0,0,.10), 0 4px 10px rgba(0,0,0,.04);
+    --shadow-token-border: inset 0 0 0 1px var(--color-border);
+    --shadow-token-border-strong: inset 0 0 0 1px var(--color-border-strong);
+}
+
+/* ─── 7. Motion tokens ───────────────────────────────────── */
+:root {
+    --duration-token-instant:  0ms;
+    --duration-token-fast:     80ms;
+    --duration-token-normal:   150ms;
+    --duration-token-slow:     250ms;
+    --duration-token-slower:   400ms;
+
+    --ease-token-default:  cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-token-in:       cubic-bezier(0.4, 0, 1, 1);
+    --ease-token-out:      cubic-bezier(0, 0, 0.2, 1);
+    --ease-token-spring:   cubic-bezier(0.34, 1.56, 0.64, 1);
+}
