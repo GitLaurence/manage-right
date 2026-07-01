@@ -6,10 +6,12 @@ use App\Models\Business;
 use App\Models\BusinessUser;
 use Flux\Flux;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
+#[Layout('layouts.app')]
 #[Title('Set Up Your Business')]
 class BusinessSetup extends Component
 {

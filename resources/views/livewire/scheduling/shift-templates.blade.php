@@ -1,5 +1,4 @@
-<x-layouts::app :title="__('Shift Templates')">
-    <div class="flex h-full w-full flex-1 flex-col gap-6">
+﻿    <div class="flex h-full w-full flex-1 flex-col gap-6">
 
         <div class="flex items-center justify-between">
             <div>
@@ -115,4 +114,3 @@
             </div>
         </form>
     </flux:modal>
-</x-layouts::app>

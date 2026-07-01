@@ -11,9 +11,11 @@ use Flux\Flux;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
+#[Layout('layouts.app')]
 #[Title('Weekly Schedule')]
 class WeeklySchedule extends Component
 {

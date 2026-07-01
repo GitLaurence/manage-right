@@ -6,10 +6,12 @@ use App\Models\Invitation;
 use Flux\Flux;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
+#[Layout('layouts.app')]
 #[Title('Invite Employee')]
 class InviteEmployee extends Component
 {

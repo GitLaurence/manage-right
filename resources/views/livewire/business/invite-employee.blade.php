@@ -1,5 +1,4 @@
-<x-layouts::app :title="__('Invite Employee')">
-    <div class="flex h-full w-full flex-1 flex-col gap-6">
+﻿    <div class="flex h-full w-full flex-1 flex-col gap-6">
 
         <div>
             <flux:heading size="xl">{{ __('Invite Employee') }}</flux:heading>
@@ -105,4 +104,3 @@
 
         </div>
     </div>
-</x-layouts::app>

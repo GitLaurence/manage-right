@@ -1,5 +1,4 @@
-<x-layouts::app :title="__('Payroll Summary')">
-    <div class="flex h-full w-full flex-1 flex-col gap-6">
+﻿    <div class="flex h-full w-full flex-1 flex-col gap-6">
 
         <div class="flex flex-wrap items-center justify-between gap-3">
             <div>
@@ -106,4 +105,3 @@
         @endif
 
     </div>
-</x-layouts::app>

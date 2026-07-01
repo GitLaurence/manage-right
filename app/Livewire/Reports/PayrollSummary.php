@@ -7,10 +7,12 @@ use App\Models\EmployeeRequest;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
+#[Layout('layouts.app')]
 #[Title('Payroll Summary')]
 class PayrollSummary extends Component
 {

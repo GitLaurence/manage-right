@@ -5,9 +5,11 @@ namespace App\Livewire\Reports;
 use App\Models\AttendanceLog;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
+#[Layout('layouts.app')]
 #[Title('Attendance Summary')]
 class AttendanceSummary extends Component
 {

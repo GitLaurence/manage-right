@@ -9,10 +9,12 @@ use Flux\Flux;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
+#[Layout('layouts.app')]
 #[Title('Clock In / Out')]
 class ClockIn extends Component
 {

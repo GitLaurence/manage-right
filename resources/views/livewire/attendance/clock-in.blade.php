@@ -1,5 +1,4 @@
-<x-layouts::app :title="__('Clock In / Out')">
-    <div class="flex min-h-full flex-1 flex-col items-center justify-center py-8">
+﻿    <div class="flex min-h-full flex-1 flex-col items-center justify-center py-8">
         <div class="w-full max-w-sm">
 
             <div class="mb-6 text-center">
@@ -195,4 +194,3 @@
 
         </div>
     </div>
-</x-layouts::app>

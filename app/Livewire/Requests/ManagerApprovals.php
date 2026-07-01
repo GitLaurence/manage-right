@@ -6,9 +6,11 @@ use App\Models\EmployeeRequest;
 use Flux\Flux;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
+#[Layout('layouts.app')]
 #[Title('Request Approvals')]
 class ManagerApprovals extends Component
 {
