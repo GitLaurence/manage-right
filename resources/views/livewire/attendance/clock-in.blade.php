@@ -1,4 +1,4 @@
-﻿    <div class="flex min-h-full flex-1 flex-col items-center justify-center py-8">
+    <div class="flex min-h-full flex-1 flex-col items-center justify-center py-8">
         <div class="w-full max-w-sm">
 
             <div class="mb-6 text-center">
@@ -37,6 +37,7 @@
                         capturedSrc: null,
                         uploading: false,
                         error: null,
+                        locationWarning: false,
 
                         async startCamera() {
                             this.error = null;
@@ -53,7 +54,11 @@
                                     navigator.geolocation.getCurrentPosition(pos => {
                                         $wire.set('latitude', pos.coords.latitude);
                                         $wire.set('longitude', pos.coords.longitude);
-                                    }, () => {});
+                                    }, () => {
+                                        this.locationWarning = true;
+                                    });
+                                } else {
+                                    this.locationWarning = true;
                                 }
                             } catch (e) {
                                 this.error = 'Camera access denied. Please allow camera access and try again.';
@@ -100,6 +105,13 @@
                     <template x-if="error">
                         <flux:callout color="red" icon="exclamation-triangle" class="w-full">
                             <flux:callout.text x-text="error"></flux:callout.text>
+                        </flux:callout>
+                    </template>
+
+                    {{-- Location warning (non-blocking) --}}
+                    <template x-if="locationWarning && !error">
+                        <flux:callout color="amber" icon="map-pin" class="w-full">
+                            <flux:callout.text>{{ __("Location couldn't be detected. Your entry will be recorded without a location.") }}</flux:callout.text>
                         </flux:callout>
                     </template>
 
@@ -163,7 +175,7 @@
                                 variant="primary"
                                 class="flex-1"
                                 @click="submit()"
-                                :disabled="uploading"
+                                ::disabled="uploading"
                             >
                                 <span x-show="!uploading">
                                     {{ $this->nextAction === 'time_in' ? __('Confirm Time In') : __('Confirm Time Out') }}

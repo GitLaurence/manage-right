@@ -6,6 +6,7 @@ use App\Models\Business;
 use App\Models\BusinessUser;
 use Flux\Flux;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Validate;
@@ -27,19 +28,21 @@ class BusinessSetup extends Component
 
         $user = Auth::user();
 
-        $business = Business::create([
-            'owner_id' => $user->id,
-            'name' => $this->name,
-            'type' => $this->type,
-        ]);
+        DB::transaction(function () use ($user) {
+            $business = Business::create([
+                'owner_id' => $user->id,
+                'name' => $this->name,
+                'type' => $this->type,
+            ]);
 
-        BusinessUser::create([
-            'user_id' => $user->id,
-            'business_id' => $business->id,
-            'role' => 'owner',
-        ]);
+            BusinessUser::create([
+                'user_id' => $user->id,
+                'business_id' => $business->id,
+                'role' => 'owner',
+            ]);
 
-        $user->update(['current_business_id' => $business->id]);
+            $user->update(['current_business_id' => $business->id]);
+        });
 
         Flux::toast(variant: 'success', text: __('Business created! Now add your first branch.'));
 

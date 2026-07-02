@@ -8,6 +8,7 @@ use App\Services\SupabaseStorage;
 use Flux\Flux;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -92,64 +93,77 @@ class ClockIn extends Component
 
     public function record(): void
     {
-        $action = $this->nextAction;
+        $lock = Cache::lock("clock-in:{$this->user->id}:{$this->business->id}", 10);
 
-        if ($action === 'done') {
-            Flux::toast(text: __('You have already completed your shift today.'));
+        if (! $lock->get()) {
+            Flux::toast(text: __('Please wait a moment and try again.'));
             return;
         }
 
-        $now = now();
-        $selfiePath = null;
+        try {
+            // Re-check inside the lock so a concurrent double-tap can't both pass this check.
+            unset($this->todayLogs, $this->nextAction);
+            $action = $this->nextAction;
 
-        // Upload selfie to Supabase Storage
-        if ($this->selfie && config('services.supabase.service_role_key')) {
-            try {
-                $filename = $this->user->id.'/'.$now->format('Y-m-d').'/'.$now->format('His').'.jpg';
-                app(SupabaseStorage::class)->upload($filename, file_get_contents($this->selfie->getRealPath()));
-                $selfiePath = $filename;
-            } catch (\Throwable $e) {
-                // Non-fatal — log without selfie
+            if ($action === 'done') {
+                Flux::toast(text: __('You have already completed your shift today.'));
+                return;
             }
+
+            $membership = $this->user->businessMemberships()
+                ->where('business_id', $this->business->id)
+                ->first();
+
+            $timezone = $membership?->branch?->timezone ?? config('app.timezone');
+            $now = Carbon::now($timezone);
+            $selfiePath = null;
+
+            // Upload selfie to Supabase Storage
+            if ($this->selfie && config('services.supabase.service_role_key')) {
+                try {
+                    $filename = $this->user->id.'/'.$now->format('Y-m-d').'/'.$now->format('His').'.jpg';
+                    app(SupabaseStorage::class)->upload($filename, file_get_contents($this->selfie->getRealPath()));
+                    $selfiePath = $filename;
+                } catch (\Throwable $e) {
+                    // Non-fatal — log without selfie
+                }
+            }
+
+            $schedule = $this->todaySchedule;
+            $lateMinutes = null;
+            $undertimeMinutes = null;
+            $overtimeMinutes = null;
+
+            if ($schedule) {
+                if ($action === 'time_in') {
+                    $scheduledStart = Carbon::parse($now->toDateString().' '.$schedule->start_time, $timezone);
+                    $lateMinutes = $now->gt($scheduledStart) ? (int) $now->diffInMinutes($scheduledStart) : 0;
+                }
+
+                if ($action === 'time_out') {
+                    $scheduledEnd = Carbon::parse($now->toDateString().' '.$schedule->end_time, $timezone);
+                    $undertimeMinutes = $now->lt($scheduledEnd) ? (int) $now->diffInMinutes($scheduledEnd) : 0;
+                    $overtimeMinutes = $now->gt($scheduledEnd) ? (int) $now->diffInMinutes($scheduledEnd) : 0;
+                }
+            }
+
+            AttendanceLog::create([
+                'user_id' => $this->user->id,
+                'business_id' => $this->business->id,
+                'branch_id' => $membership?->branch_id,
+                'schedule_entry_id' => $schedule?->id,
+                'type' => $action,
+                'selfie_path' => $selfiePath,
+                'latitude' => $this->latitude ?: null,
+                'longitude' => $this->longitude ?: null,
+                'logged_at' => $now,
+                'late_minutes' => $lateMinutes,
+                'undertime_minutes' => $undertimeMinutes,
+                'overtime_minutes' => $overtimeMinutes,
+            ]);
+        } finally {
+            $lock->release();
         }
-
-        $schedule = $this->todaySchedule;
-        $lateMinutes = null;
-        $undertimeMinutes = null;
-        $overtimeMinutes = null;
-
-        if ($schedule) {
-            if ($action === 'time_in') {
-                $scheduledStart = Carbon::parse($now->toDateString().' '.$schedule->start_time);
-                $lateMinutes = max(0, (int) $now->diffInMinutes($scheduledStart, false) * -1);
-            }
-
-            if ($action === 'time_out') {
-                $scheduledEnd = Carbon::parse($now->toDateString().' '.$schedule->end_time);
-                $diff = (int) $now->diffInMinutes($scheduledEnd, false);
-                $undertimeMinutes = max(0, $diff);
-                $overtimeMinutes = max(0, $diff * -1);
-            }
-        }
-
-        $membership = $this->user->businessMemberships()
-            ->where('business_id', $this->business->id)
-            ->first();
-
-        AttendanceLog::create([
-            'user_id' => $this->user->id,
-            'business_id' => $this->business->id,
-            'branch_id' => $membership?->branch_id,
-            'schedule_entry_id' => $schedule?->id,
-            'type' => $action,
-            'selfie_path' => $selfiePath,
-            'latitude' => $this->latitude ?: null,
-            'longitude' => $this->longitude ?: null,
-            'logged_at' => $now,
-            'late_minutes' => $lateMinutes,
-            'undertime_minutes' => $undertimeMinutes,
-            'overtime_minutes' => $overtimeMinutes,
-        ]);
 
         $this->selfie = null;
         $this->done = true;

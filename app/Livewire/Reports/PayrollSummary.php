@@ -21,8 +21,12 @@ class PayrollSummary extends Component
 
     public function mount(): void
     {
+        $business = Auth::user()->currentBusiness;
+
+        abort_unless($business && Auth::user()->isManagerOrOwnerOf($business), 403);
+
         $this->weekStart = today()->startOfWeek()->toDateString();
-        $this->branchId  = Auth::user()->currentBusiness?->branches()->value('id');
+        $this->branchId  = $business->branches()->value('id');
     }
 
     #[Computed]
@@ -46,6 +50,10 @@ class PayrollSummary extends Component
     #[Computed]
     public function rows(): \Illuminate\Support\Collection
     {
+        if ($this->branches->isEmpty()) {
+            return collect();
+        }
+
         $start = Carbon::parse($this->weekStart);
         $end   = Carbon::parse($this->weekEnd);
 
@@ -78,8 +86,11 @@ class PayrollSummary extends Component
             $totalOvertimeMinutes  = $timesOut->sum('overtime_minutes');
 
             $daysPresent = $entries->groupBy(fn ($l) => $l->logged_at->toDateString())->count();
-            $leaveDays   = $approvedLeaveByUser->get($user->id, collect())->sum(function ($req) {
-                return $req->from_date->diffInDays($req->to_date ?? $req->from_date) + 1;
+            $leaveDays   = $approvedLeaveByUser->get($user->id, collect())->sum(function ($req) use ($start, $end) {
+                $leaveStart = $req->from_date->max($start);
+                $leaveEnd   = ($req->to_date ?? $req->from_date)->min($end);
+
+                return $leaveStart->diffInDays($leaveEnd) + 1;
             });
 
             return (object) [
@@ -100,13 +111,13 @@ class PayrollSummary extends Component
     public function previousWeek(): void
     {
         $this->weekStart = Carbon::parse($this->weekStart)->subWeek()->toDateString();
-        unset($this->rows);
+        unset($this->rows, $this->weekEnd);
     }
 
     public function nextWeek(): void
     {
         $this->weekStart = Carbon::parse($this->weekStart)->addWeek()->toDateString();
-        unset($this->rows);
+        unset($this->rows, $this->weekEnd);
     }
 
     public function updatedBranchId(): void
@@ -121,7 +132,9 @@ class PayrollSummary extends Component
         $weekEnd   = $this->weekEnd;
         $business  = $this->business->name;
 
-        return response()->streamDownload(function () use ($rows, $weekStart, $weekEnd, $business) {
+        $sanitize = fn ($v) => preg_match('/^[=+\-@\t\r]/', (string) $v) ? "'".$v : $v;
+
+        return response()->streamDownload(function () use ($rows, $weekStart, $weekEnd, $business, $sanitize) {
             $handle = fopen('php://output', 'w');
 
             fputcsv($handle, ["Payroll Summary — {$business} — {$weekStart} to {$weekEnd}"]);
@@ -133,8 +146,8 @@ class PayrollSummary extends Component
 
             foreach ($rows as $row) {
                 fputcsv($handle, [
-                    $row->user->name,
-                    $row->branch?->name ?? '',
+                    $sanitize($row->user->name),
+                    $sanitize($row->branch?->name ?? ''),
                     $row->days_present,
                     $row->leave_days,
                     $row->late_hours,
