@@ -1,4 +1,4 @@
-﻿    <div class="flex h-full w-full flex-1 flex-col gap-4" x-data="{ dragging: null }">
+    <div class="flex h-full w-full flex-1 flex-col gap-4" x-data="{ dragging: null }">
 
         {{-- Toolbar --}}
         <div class="flex flex-wrap items-center justify-between gap-3">

@@ -1,4 +1,4 @@
-﻿    <div class="flex min-h-full flex-1 items-center justify-center py-16">
+    <div class="flex min-h-full flex-1 items-center justify-center py-16">
         <div class="w-full max-w-md">
             <div class="mb-8 text-center">
                 <flux:heading size="xl">Welcome to Manage Right</flux:heading>
