@@ -44,11 +44,15 @@ Route::get('/invitations/{token}', function (string $token) {
         ->where('expires_at', '>', now())
         ->firstOrFail();
 
+    if (auth()->check()) {
+        app(\App\Actions\AcceptInvitation::class)(auth()->user(), $invitation);
+
+        return redirect()->route('dashboard');
+    }
+
     session(['invitation_token' => $token]);
 
-    return auth()->check()
-        ? redirect()->route('dashboard')
-        : redirect()->route('register');
+    return redirect()->route('register');
 })->name('invitations.accept');
 
 require __DIR__.'/settings.php';

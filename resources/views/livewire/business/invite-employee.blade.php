@@ -1,4 +1,4 @@
-﻿    <div class="flex h-full w-full flex-1 flex-col gap-6">
+    <div class="flex h-full w-full flex-1 flex-col gap-6">
 
         <div>
             <flux:heading size="xl">{{ __('Invite Employee') }}</flux:heading>
@@ -11,14 +11,6 @@
             <flux:card>
                 <form wire:submit="send" class="space-y-5">
                     <flux:heading size="lg">{{ __('New Invitation') }}</flux:heading>
-
-                    <flux:input
-                        wire:model="email"
-                        :label="__('Email Address')"
-                        type="email"
-                        :placeholder="__('employee@example.com')"
-                        required
-                    />
 
                     <flux:select wire:model="role" :label="__('Role')" required>
                         <flux:select.option value="employee">{{ __('Employee') }}</flux:select.option>
@@ -74,7 +66,7 @@
                 @forelse ($this->pendingInvitations as $invitation)
                     <flux:card class="flex items-center justify-between gap-4">
                         <div>
-                            <p class="font-medium">{{ $invitation->email }}</p>
+                            <p class="font-medium">{{ $invitation->email ?? __('Awaiting registration') }}</p>
                             <flux:text>
                                 {{ ucfirst($invitation->role) }}
                                 @if ($invitation->position)

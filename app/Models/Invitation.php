@@ -21,6 +21,7 @@ class Invitation extends Model
     public static function generate(array $attributes): static
     {
         return static::create(array_merge($attributes, [
+            'email' => $attributes['email'] ?? null,
             'token' => Str::random(64),
             'expires_at' => now()->addDays(7),
         ]));
