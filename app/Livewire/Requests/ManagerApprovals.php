@@ -21,7 +21,11 @@ class ManagerApprovals extends Component
 
     public function mount(): void
     {
-        $this->branchId = Auth::user()->currentBusiness?->branches()->value('id');
+        $business = Auth::user()->currentBusiness;
+
+        abort_unless($business && Auth::user()->isManagerOrOwnerOf($business), 403);
+
+        $this->branchId = $business->branches()->value('id');
     }
 
     #[Computed]
@@ -39,6 +43,10 @@ class ManagerApprovals extends Component
     #[Computed]
     public function requests()
     {
+        if ($this->branches->isEmpty()) {
+            return collect();
+        }
+
         return EmployeeRequest::with(['user', 'branch', 'reviewer'])
             ->where('business_id', $this->business->id)
             ->when($this->branchId, fn ($q) => $q->where('branch_id', $this->branchId))
@@ -49,12 +57,15 @@ class ManagerApprovals extends Component
 
     public function approve(int $id): void
     {
-        EmployeeRequest::find($id)->update([
-            'status'      => 'approved',
-            'reviewed_by' => Auth::id(),
-            'reviewed_at' => now(),
-            'manager_remarks' => null,
-        ]);
+        EmployeeRequest::where('id', $id)
+            ->where('business_id', $this->business->id)
+            ->firstOrFail()
+            ->update([
+                'status'      => 'approved',
+                'reviewed_by' => Auth::id(),
+                'reviewed_at' => now(),
+                'manager_remarks' => null,
+            ]);
 
         unset($this->requests);
         Flux::toast(variant: 'success', text: __('Request approved.'));
@@ -71,12 +82,15 @@ class ManagerApprovals extends Component
     {
         $this->validate(['remarks' => 'nullable|string|max:1000']);
 
-        EmployeeRequest::find($this->reviewingId)->update([
-            'status'          => 'rejected',
-            'reviewed_by'     => Auth::id(),
-            'reviewed_at'     => now(),
-            'manager_remarks' => $this->remarks ?: null,
-        ]);
+        EmployeeRequest::where('id', $this->reviewingId)
+            ->where('business_id', $this->business->id)
+            ->firstOrFail()
+            ->update([
+                'status'          => 'rejected',
+                'reviewed_by'     => Auth::id(),
+                'reviewed_at'     => now(),
+                'manager_remarks' => $this->remarks ?: null,
+            ]);
 
         $this->reviewingId = null;
         $this->remarks     = '';

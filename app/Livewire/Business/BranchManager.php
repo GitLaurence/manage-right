@@ -17,6 +17,13 @@ class BranchManager extends Component
 {
     public ?int $editingId = null;
 
+    public function mount(): void
+    {
+        $business = Auth::user()->currentBusiness;
+
+        abort_unless($business && Auth::user()->isOwnerOf($business), 403);
+    }
+
     #[Validate('required|string|max:255')]
     public string $branchName = '';
 

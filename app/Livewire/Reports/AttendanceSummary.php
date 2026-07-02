@@ -18,8 +18,12 @@ class AttendanceSummary extends Component
 
     public function mount(): void
     {
+        $business = Auth::user()->currentBusiness;
+
+        abort_unless($business && Auth::user()->isManagerOrOwnerOf($business), 403);
+
         $this->date     = today()->toDateString();
-        $this->branchId = Auth::user()->currentBusiness?->branches()->value('id');
+        $this->branchId = $business->branches()->value('id');
     }
 
     #[Computed]
@@ -37,6 +41,10 @@ class AttendanceSummary extends Component
     #[Computed]
     public function logs()
     {
+        if ($this->branches->isEmpty()) {
+            return collect();
+        }
+
         return AttendanceLog::with(['user', 'branch', 'scheduleEntry'])
             ->where('business_id', $this->business->id)
             ->when($this->branchId, fn ($q) => $q->where('branch_id', $this->branchId))

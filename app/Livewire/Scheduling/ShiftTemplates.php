@@ -17,6 +17,13 @@ class ShiftTemplates extends Component
 {
     public ?int $editingId = null;
 
+    public function mount(): void
+    {
+        $business = Auth::user()->currentBusiness;
+
+        abort_unless($business && Auth::user()->isManagerOrOwnerOf($business), 403);
+    }
+
     #[Validate('required|string|max:100')]
     public string $name = '';
 

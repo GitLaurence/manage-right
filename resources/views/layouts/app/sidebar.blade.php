@@ -17,51 +17,67 @@
                     </flux:sidebar.item>
                 </flux:sidebar.group>
 
-                @if (auth()->user()->current_business_id)
-                    <flux:sidebar.group :heading="__('Management')" class="grid">
-                        <flux:sidebar.item icon="layout-grid" :href="route('branches.index')" :current="request()->routeIs('branches.*')" wire:navigate>
-                            {{ __('Branches') }}
-                        </flux:sidebar.item>
-                        <flux:sidebar.item icon="users" :href="route('employees.invite')" :current="request()->routeIs('employees.*')" wire:navigate>
-                            {{ __('Invite Employee') }}
-                        </flux:sidebar.item>
-                    </flux:sidebar.group>
+                @php
+                    $currentBusiness = auth()->user()->currentBusiness;
+                    $isOwner = $currentBusiness && auth()->user()->isOwnerOf($currentBusiness);
+                    $isManagerOrOwner = $currentBusiness && auth()->user()->isManagerOrOwnerOf($currentBusiness);
+                @endphp
+
+                @if ($currentBusiness)
+                    @if ($isOwner)
+                        <flux:sidebar.group :heading="__('Management')" class="grid">
+                            <flux:sidebar.item icon="layout-grid" :href="route('branches.index')" :current="request()->routeIs('branches.*')" wire:navigate>
+                                {{ __('Branches') }}
+                            </flux:sidebar.item>
+                            <flux:sidebar.item icon="users" :href="route('employees.invite')" :current="request()->routeIs('employees.*')" wire:navigate>
+                                {{ __('Invite Employee') }}
+                            </flux:sidebar.item>
+                        </flux:sidebar.group>
+                    @endif
 
                     <flux:sidebar.group :heading="__('Attendance')" class="grid">
                         <flux:sidebar.item icon="camera" :href="route('attendance.clock')" :current="request()->routeIs('attendance.clock')" wire:navigate>
                             {{ __('Clock In / Out') }}
                         </flux:sidebar.item>
-                        <flux:sidebar.item icon="clipboard-document-list" :href="route('attendance.review')" :current="request()->routeIs('attendance.review')" wire:navigate>
-                            {{ __('Review') }}
-                        </flux:sidebar.item>
+                        @if ($isManagerOrOwner)
+                            <flux:sidebar.item icon="clipboard-document-list" :href="route('attendance.review')" :current="request()->routeIs('attendance.review')" wire:navigate>
+                                {{ __('Review') }}
+                            </flux:sidebar.item>
+                        @endif
                     </flux:sidebar.group>
 
-                    <flux:sidebar.group :heading="__('Scheduling')" class="grid">
-                        <flux:sidebar.item icon="calendar-days" :href="route('schedule.index')" :current="request()->routeIs('schedule.*')" wire:navigate>
-                            {{ __('Weekly Schedule') }}
-                        </flux:sidebar.item>
-                        <flux:sidebar.item icon="squares-2x2" :href="route('shift-templates.index')" :current="request()->routeIs('shift-templates.*')" wire:navigate>
-                            {{ __('Shift Templates') }}
-                        </flux:sidebar.item>
-                    </flux:sidebar.group>
+                    @if ($isManagerOrOwner)
+                        <flux:sidebar.group :heading="__('Scheduling')" class="grid">
+                            <flux:sidebar.item icon="calendar-days" :href="route('schedule.index')" :current="request()->routeIs('schedule.*')" wire:navigate>
+                                {{ __('Weekly Schedule') }}
+                            </flux:sidebar.item>
+                            <flux:sidebar.item icon="squares-2x2" :href="route('shift-templates.index')" :current="request()->routeIs('shift-templates.*')" wire:navigate>
+                                {{ __('Shift Templates') }}
+                            </flux:sidebar.item>
+                        </flux:sidebar.group>
+                    @endif
 
                     <flux:sidebar.group :heading="__('Requests')" class="grid">
                         <flux:sidebar.item icon="inbox" :href="route('requests.index')" :current="request()->routeIs('requests.index')" wire:navigate>
                             {{ __('My Requests') }}
                         </flux:sidebar.item>
-                        <flux:sidebar.item icon="check-circle" :href="route('requests.approvals')" :current="request()->routeIs('requests.approvals')" wire:navigate>
-                            {{ __('Approvals') }}
-                        </flux:sidebar.item>
+                        @if ($isManagerOrOwner)
+                            <flux:sidebar.item icon="check-circle" :href="route('requests.approvals')" :current="request()->routeIs('requests.approvals')" wire:navigate>
+                                {{ __('Approvals') }}
+                            </flux:sidebar.item>
+                        @endif
                     </flux:sidebar.group>
 
-                    <flux:sidebar.group :heading="__('Reports')" class="grid">
-                        <flux:sidebar.item icon="chart-bar" :href="route('reports.attendance')" :current="request()->routeIs('reports.attendance')" wire:navigate>
-                            {{ __('Attendance') }}
-                        </flux:sidebar.item>
-                        <flux:sidebar.item icon="banknotes" :href="route('reports.payroll')" :current="request()->routeIs('reports.payroll')" wire:navigate>
-                            {{ __('Payroll Summary') }}
-                        </flux:sidebar.item>
-                    </flux:sidebar.group>
+                    @if ($isManagerOrOwner)
+                        <flux:sidebar.group :heading="__('Reports')" class="grid">
+                            <flux:sidebar.item icon="chart-bar" :href="route('reports.attendance')" :current="request()->routeIs('reports.attendance')" wire:navigate>
+                                {{ __('Attendance') }}
+                            </flux:sidebar.item>
+                            <flux:sidebar.item icon="banknotes" :href="route('reports.payroll')" :current="request()->routeIs('reports.payroll')" wire:navigate>
+                                {{ __('Payroll Summary') }}
+                            </flux:sidebar.item>
+                        </flux:sidebar.group>
+                    @endif
                 @endif
             </flux:sidebar.nav>
 

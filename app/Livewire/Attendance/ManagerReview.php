@@ -24,8 +24,12 @@ class ManagerReview extends Component
 
     public function mount(): void
     {
+        $business = Auth::user()->currentBusiness;
+
+        abort_unless($business && Auth::user()->isManagerOrOwnerOf($business), 403);
+
         $this->date = today()->toDateString();
-        $this->branchId = Auth::user()->currentBusiness?->branches()->value('id');
+        $this->branchId = $business->branches()->value('id');
     }
 
     #[Computed]
@@ -43,6 +47,10 @@ class ManagerReview extends Component
     #[Computed]
     public function logs()
     {
+        if ($this->branches->isEmpty()) {
+            return collect();
+        }
+
         return AttendanceLog::with(['user', 'branch'])
             ->where('business_id', $this->business->id)
             ->when($this->branchId, fn ($q) => $q->where('branch_id', $this->branchId))
@@ -57,12 +65,15 @@ class ManagerReview extends Component
 
     public function approve(int $logId): void
     {
-        AttendanceLog::find($logId)->update([
-            'status' => 'approved',
-            'reviewed_by' => Auth::id(),
-            'reviewed_at' => now(),
-            'manager_note' => null,
-        ]);
+        AttendanceLog::where('id', $logId)
+            ->where('business_id', $this->business->id)
+            ->firstOrFail()
+            ->update([
+                'status' => 'approved',
+                'reviewed_by' => Auth::id(),
+                'reviewed_at' => now(),
+                'manager_note' => null,
+            ]);
 
         unset($this->logs);
         Flux::toast(variant: 'success', text: __('Entry approved.'));
@@ -79,12 +90,15 @@ class ManagerReview extends Component
     {
         $this->validate(['managerNote' => 'nullable|string|max:500']);
 
-        AttendanceLog::find($this->flaggingId)->update([
-            'status' => 'flagged',
-            'reviewed_by' => Auth::id(),
-            'reviewed_at' => now(),
-            'manager_note' => $this->managerNote ?: null,
-        ]);
+        AttendanceLog::where('id', $this->flaggingId)
+            ->where('business_id', $this->business->id)
+            ->firstOrFail()
+            ->update([
+                'status' => 'flagged',
+                'reviewed_by' => Auth::id(),
+                'reviewed_at' => now(),
+                'manager_note' => $this->managerNote ?: null,
+            ]);
 
         $this->flaggingId = null;
         $this->managerNote = '';

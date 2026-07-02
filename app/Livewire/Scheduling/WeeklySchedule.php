@@ -24,8 +24,12 @@ class WeeklySchedule extends Component
 
     public function mount(): void
     {
+        $business = Auth::user()->currentBusiness;
+
+        abort_unless($business && Auth::user()->isManagerOrOwnerOf($business), 403);
+
         $this->weekStart = Carbon::now()->startOfWeek(Carbon::MONDAY)->toDateString();
-        $this->branchId = Auth::user()->currentBusiness?->branches()->value('id');
+        $this->branchId = $business->branches()->value('id');
     }
 
     #[Computed]
