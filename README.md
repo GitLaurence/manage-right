@@ -92,11 +92,11 @@ Manage Right is built for cafés, restaurants, salons, retail stores, kiosks, cl
 ---
 
 ### Phase 8 — Polish & Launch
-- [ ] Mobile-responsive UI review
-- [ ] Performance optimization (lazy loading, caching)
-- [ ] Supabase Row Level Security (RLS) policies
-- [ ] End-to-end testing with Pest
-- [ ] Deployment setup (Forge / Coolify / Railway)
+- [x] Mobile-responsive UI review
+- [x] Performance optimization (lazy loading, caching)
+- [x] Supabase Row Level Security (RLS) policies
+- [x] End-to-end testing with Pest
+- [x] Deployment setup (Render, Docker)
 
 ---
 

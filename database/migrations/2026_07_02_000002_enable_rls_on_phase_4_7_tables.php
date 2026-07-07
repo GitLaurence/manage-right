@@ -13,6 +13,10 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (DB::connection()->getDriverName() !== 'pgsql') {
+            return;
+        }
+
         $tables = ['attendance_logs', 'employee_requests', 'activity_logs'];
 
         foreach ($tables as $table) {
@@ -22,6 +26,10 @@ return new class extends Migration
 
     public function down(): void
     {
+        if (DB::connection()->getDriverName() !== 'pgsql') {
+            return;
+        }
+
         $tables = ['attendance_logs', 'employee_requests', 'activity_logs'];
 
         foreach ($tables as $table) {

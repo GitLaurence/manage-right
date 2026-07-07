@@ -21,6 +21,8 @@ class WeeklySchedule extends Component
 {
     public string $weekStart;
     public ?int $branchId = null;
+    public ?int $assigningUserId = null;
+    public ?string $assigningDate = null;
 
     public function mount(): void
     {
@@ -73,9 +75,10 @@ class WeeklySchedule extends Component
             return null;
         }
 
-        return Schedule::firstOrCreate(
-            ['branch_id' => $this->branchId, 'week_start' => $this->weekStart],
-        );
+        return Schedule::where('branch_id', $this->branchId)
+            ->whereDate('week_start', $this->weekStart)
+            ->first()
+            ?? Schedule::create(['branch_id' => $this->branchId, 'week_start' => $this->weekStart]);
     }
 
     #[Computed]
@@ -123,6 +126,26 @@ class WeeklySchedule extends Component
         );
 
         $this->clearCache();
+    }
+
+    public function openAssign(int $userId, string $date): void
+    {
+        $this->assigningUserId = $userId;
+        $this->assigningDate = $date;
+        Flux::modal('assign-modal')->show();
+    }
+
+    public function assignFromModal(int $templateId): void
+    {
+        if (! $this->assigningUserId || ! $this->assigningDate) {
+            return;
+        }
+
+        $this->assign($templateId, $this->assigningUserId, $this->assigningDate);
+
+        $this->assigningUserId = null;
+        $this->assigningDate = null;
+        Flux::modal('assign-modal')->close();
     }
 
     public function removeEntry(int $userId, string $date): void

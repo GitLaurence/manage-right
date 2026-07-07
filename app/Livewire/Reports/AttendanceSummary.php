@@ -4,6 +4,7 @@ namespace App\Livewire\Reports;
 
 use App\Models\AttendanceLog;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -45,12 +46,14 @@ class AttendanceSummary extends Component
             return collect();
         }
 
-        return AttendanceLog::with(['user', 'branch', 'scheduleEntry'])
+        $key = "reports:attendance-summary:{$this->business->id}:{$this->branchId}:{$this->date}";
+
+        return Cache::remember($key, 60, fn () => AttendanceLog::with(['user', 'branch', 'scheduleEntry'])
             ->where('business_id', $this->business->id)
             ->when($this->branchId, fn ($q) => $q->where('branch_id', $this->branchId))
             ->whereDate('logged_at', $this->date)
             ->orderBy('logged_at')
-            ->get();
+            ->get());
     }
 
     #[Computed]

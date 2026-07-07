@@ -44,7 +44,46 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+/**
+ * Creates a Business with an owner User, a Branch, and a BusinessUser
+ * membership (role: owner), and sets the owner's current_business_id.
+ *
+ * @return array{user: \App\Models\User, business: \App\Models\Business, branch: \App\Models\Branch}
+ */
+function createBusinessWithOwner(array $userAttributes = []): array
 {
-    // ..
+    $user = \App\Models\User::factory()->create($userAttributes);
+    $business = \App\Models\Business::factory()->create(['owner_id' => $user->id]);
+    $branch = \App\Models\Branch::factory()->create(['business_id' => $business->id]);
+
+    \App\Models\BusinessUser::factory()->owner()->create([
+        'user_id' => $user->id,
+        'business_id' => $business->id,
+        'branch_id' => $branch->id,
+    ]);
+
+    $user->update(['current_business_id' => $business->id]);
+
+    return ['user' => $user, 'business' => $business, 'branch' => $branch];
+}
+
+/**
+ * Adds a new User as a member of an existing business/branch with the given
+ * role, and sets their current_business_id so they're "acting" in that
+ * business for tenant-scoped queries.
+ */
+function addMemberToBusiness(\App\Models\Business $business, \App\Models\Branch $branch, string $role = 'employee', array $userAttributes = []): \App\Models\User
+{
+    $user = \App\Models\User::factory()->create($userAttributes);
+
+    \App\Models\BusinessUser::factory()->create([
+        'user_id' => $user->id,
+        'business_id' => $business->id,
+        'branch_id' => $branch->id,
+        'role' => $role,
+    ]);
+
+    $user->update(['current_business_id' => $business->id]);
+
+    return $user;
 }

@@ -6,6 +6,7 @@ use App\Models\AttendanceLog;
 use App\Models\EmployeeRequest;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -57,25 +58,31 @@ class PayrollSummary extends Component
         $start = Carbon::parse($this->weekStart);
         $end   = Carbon::parse($this->weekEnd);
 
-        $logs = AttendanceLog::with(['user', 'branch'])
-            ->where('business_id', $this->business->id)
-            ->when($this->branchId, fn ($q) => $q->where('branch_id', $this->branchId))
-            ->whereBetween('logged_at', [$start->startOfDay(), $end->endOfDay()])
-            ->get();
+        $key = "reports:payroll:{$this->business->id}:{$this->branchId}:{$this->weekStart}";
 
-        $requests = EmployeeRequest::with('user')
-            ->where('business_id', $this->business->id)
-            ->where('status', 'approved')
-            ->where('type', 'leave')
-            ->where(fn ($q) => $q
-                ->whereBetween('from_date', [$start, $end])
-                ->orWhereBetween('to_date', [$start, $end])
-            )
-            ->get();
+        [$logs, $requests] = Cache::remember($key, 120, function () use ($start, $end) {
+            $logs = AttendanceLog::with(['user', 'branch'])
+                ->where('business_id', $this->business->id)
+                ->when($this->branchId, fn ($q) => $q->where('branch_id', $this->branchId))
+                ->whereBetween('logged_at', [$start->copy()->startOfDay(), $end->copy()->endOfDay()])
+                ->get();
+
+            $requests = EmployeeRequest::with('user')
+                ->where('business_id', $this->business->id)
+                ->where('status', 'approved')
+                ->where('type', 'leave')
+                ->where(fn ($q) => $q
+                    ->whereBetween('from_date', [$start, $end])
+                    ->orWhereBetween('to_date', [$start, $end])
+                )
+                ->get();
+
+            return [$logs, $requests];
+        });
 
         $approvedLeaveByUser = $requests->groupBy('user_id');
 
-        return $logs->groupBy('user_id')->map(function ($entries) use ($approvedLeaveByUser) {
+        return $logs->groupBy('user_id')->map(function ($entries) use ($approvedLeaveByUser, $start, $end) {
             $user = $entries->first()->user;
 
             $timesIn  = $entries->where('type', 'time_in');

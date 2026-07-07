@@ -2,12 +2,16 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BelongsToTenant;
 use App\Services\SupabaseStorage;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class AttendanceLog extends Model
 {
+    use BelongsToTenant, HasFactory;
+
     protected $fillable = [
         'user_id', 'business_id', 'branch_id', 'schedule_entry_id',
         'type', 'selfie_path', 'latitude', 'longitude', 'logged_at',

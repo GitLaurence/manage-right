@@ -137,8 +137,9 @@
                                             </div>
                                         @else
                                             <div
-                                                class="mx-auto min-h-[2.5rem] rounded-lg border-2 border-dashed border-transparent transition hover:border-zinc-300 dark:hover:border-zinc-600"
-                                                title="{{ __('Drop a shift here') }}"
+                                                class="mx-auto min-h-[2.5rem] cursor-pointer rounded-lg border-2 border-dashed border-transparent transition hover:border-zinc-300 dark:hover:border-zinc-600"
+                                                wire:click="openAssign({{ $member->user_id }}, '{{ $dateStr }}')"
+                                                title="{{ __('Drop a shift here, or tap to choose one') }}"
                                             ></div>
                                         @endif
                                     </td>
@@ -150,8 +151,37 @@
             </div>
 
             <flux:text class="text-center text-xs text-zinc-400">
-                {{ __('Drag a shift onto a cell to assign. Click an assigned shift to remove it.') }}
+                {{ __('Drag a shift onto a cell to assign, or tap an empty cell to choose one. Click an assigned shift to remove it.') }}
             </flux:text>
         @endif
+
+        <flux:modal name="assign-modal" class="max-w-sm">
+            <div class="space-y-5">
+                <flux:heading>{{ __('Assign a Shift') }}</flux:heading>
+
+                @if ($this->shiftTemplates->isEmpty())
+                    <flux:text>{{ __('No shift templates available.') }}</flux:text>
+                @else
+                    <div class="flex flex-col gap-2">
+                        @foreach ($this->shiftTemplates as $template)
+                            @php $c = $template->colorClasses(); @endphp
+                            <flux:button
+                                wire:click="assignFromModal({{ $template->id }})"
+                                class="justify-between {{ $c['bg'] }} {{ $c['text'] }} {{ $c['border'] }}"
+                            >
+                                <span>{{ $template->name }}</span>
+                                <span class="text-xs font-normal">{{ $template->formattedHours() }}</span>
+                            </flux:button>
+                        @endforeach
+                    </div>
+                @endif
+
+                <div class="flex justify-end">
+                    <flux:modal.close>
+                        <flux:button>{{ __('Cancel') }}</flux:button>
+                    </flux:modal.close>
+                </div>
+            </div>
+        </flux:modal>
 
     </div>

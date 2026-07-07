@@ -7,6 +7,7 @@ use App\Models\AttendanceLog;
 use App\Models\EmployeeRequest;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -35,18 +36,24 @@ class Overview extends Component
     {
         $today = today();
 
-        $logs = AttendanceLog::where('business_id', $this->business->id)
-            ->whereDate('logged_at', $today)
-            ->get();
+        return Cache::remember(
+            "dashboard:today-stats:{$this->business->id}:{$today->toDateString()}",
+            60,
+            function () use ($today) {
+                $logs = AttendanceLog::where('business_id', $this->business->id)
+                    ->whereDate('logged_at', $today)
+                    ->get();
 
-        $timesIn = $logs->where('type', 'time_in');
+                $timesIn = $logs->where('type', 'time_in');
 
-        return [
-            'present'   => $timesIn->count(),
-            'late'      => $timesIn->filter(fn ($l) => $l->isLate())->count(),
-            'pending'   => $logs->where('status', 'pending')->count(),
-            'flagged'   => $logs->where('status', 'flagged')->count(),
-        ];
+                return [
+                    'present'   => $timesIn->count(),
+                    'late'      => $timesIn->filter(fn ($l) => $l->isLate())->count(),
+                    'pending'   => $logs->where('status', 'pending')->count(),
+                    'flagged'   => $logs->where('status', 'flagged')->count(),
+                ];
+            }
+        );
     }
 
     #[Computed]
@@ -62,11 +69,15 @@ class Overview extends Component
     {
         $today = today();
 
-        $logs = AttendanceLog::where('business_id', $this->business->id)
-            ->whereDate('logged_at', $today)
-            ->where('type', 'time_in')
-            ->get()
-            ->groupBy('branch_id');
+        $logs = Cache::remember(
+            "dashboard:branch-snapshots:{$this->business->id}:{$today->toDateString()}",
+            60,
+            fn () => AttendanceLog::where('business_id', $this->business->id)
+                ->whereDate('logged_at', $today)
+                ->where('type', 'time_in')
+                ->get()
+                ->groupBy('branch_id')
+        );
 
         return $this->branches->map(function ($branch) use ($logs) {
             $branchLogs = $logs->get($branch->id, collect());

@@ -39,7 +39,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 Route::get('/invitations/{token}', function (string $token) {
-    $invitation = \App\Models\Invitation::where('token', $token)
+    $invitation = \App\Models\Invitation::withoutTenant()
+        ->where('token', $token)
         ->whereNull('accepted_at')
         ->where('expires_at', '>', now())
         ->firstOrFail();

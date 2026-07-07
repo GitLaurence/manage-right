@@ -10,7 +10,7 @@ class AcceptInvitation
 {
     public function __invoke(User $user, Invitation $invitation): void
     {
-        if (! $user->businessMemberships()->where('business_id', $invitation->business_id)->exists()) {
+        if (! $user->businessMemberships()->withoutTenant()->where('business_id', $invitation->business_id)->exists()) {
             BusinessUser::create([
                 'user_id' => $user->id,
                 'business_id' => $invitation->business_id,
